@@ -8,7 +8,7 @@ namespace Day13
     {
         public struct Layer
         {
-            public int Depth { get; set; }
+            public int Depth;
             public int Range;
         }
 
