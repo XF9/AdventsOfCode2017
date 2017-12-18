@@ -11,13 +11,12 @@ namespace Day18
         public string Value { get; set; }
     }
 
-    class Register
+    class Program
     {
         public List<Int64> Queue { get; }
         public List<Int64> QueueTo { get; set; }
 
         public bool Waiting { get; private set; }
-
         public Int32 QueueCommandCount { get; private set; }
 
         private readonly int _programId;
@@ -25,7 +24,7 @@ namespace Day18
         private readonly List<Command> _commands;
         private readonly Dictionary<Char, Int64> _register;
 
-        public Register(int programId, IEnumerable<Command> commands)
+        public Program(int programId, IEnumerable<Command> commands)
         {
             _programId = programId;
             _commands = commands.ToList();
@@ -100,7 +99,7 @@ namespace Day18
         }
     }
 
-    class Program
+    class Runner
     {
         static void Main(string[] args)
         {
@@ -113,26 +112,26 @@ namespace Day18
             .ToList();
 
             var queueTeil1 = new List<Int64>();
-            Register registerTeil1 = new Register(0, commands);
-            registerTeil1.QueueTo = queueTeil1;
+            Program program = new Program(0, commands);
+            program.QueueTo = queueTeil1;
 
-            while(!registerTeil1.Waiting)
-                registerTeil1.Tick();
+            while(!program.Waiting)
+                program.Tick();
 
             Console.WriteLine(queueTeil1.Last());
 
-            Register registerTeil20 = new Register(0, commands);
-            Register registerTeil21 = new Register(1, commands);
-            registerTeil20.QueueTo = registerTeil21.Queue;
-            registerTeil21.QueueTo = registerTeil20.Queue;
+            Program program0 = new Program(0, commands);
+            Program program1 = new Program(1, commands);
+            program0.QueueTo = program1.Queue;
+            program1.QueueTo = program0.Queue;
 
-            while (!registerTeil20.Waiting || !registerTeil21.Waiting)
+            while (!program0.Waiting || !program1.Waiting)
             {
-                registerTeil20.Tick();
-                registerTeil21.Tick();
+                program0.Tick();
+                program1.Tick();
             }
 
-            Console.WriteLine(registerTeil21.QueueCommandCount);
+            Console.WriteLine(program1.QueueCommandCount);
             Console.ReadKey();
         }
     }
